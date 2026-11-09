@@ -266,7 +266,7 @@ let order = [], pos = 0, answers = {};
 
 function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
 function ansText(item){return item.t==="ox" ? (item.a?"O":"X") : CIRCLED[item.a]+" "+item.o[item.a]}
-function top(){window.scrollTo({top:0,behavior:"auto"})}
+function toTop(){window.scrollTo({top:0,behavior:"auto"})}
 
 function start(){
   chip.textContent="11"; barLabel.textContent="11주차 복습 퀴즈";
@@ -294,7 +294,7 @@ function start(){
     <p class="foot">범위: 이론 1 피드업·피드백·피드포워드(Hattie &amp; Timperley, 2007) · 심화 피드백을 분류하는 단계 · 읽기 자료 『글이 삶이다』 2부 5 고쳐쓰기 · 이론 2 전역 수정과 국소 수정(Sommers, 1980)<br>유환일(한양대학교 교양국어위원회) · AI시대 글쓰기의 힘 · 2026-2학기</p>
   </section>`;
   document.getElementById("go").onclick=()=>begin(Q.map((_,i)=>i));
-  top();
+  toTop();
 }
 
 function begin(list){order=list; pos=0; answers={}; render();}
@@ -318,7 +318,7 @@ function render(){
   ${body}
   <div id="after"></div>`;
   app.querySelectorAll("[data-v]").forEach(b=>b.addEventListener("click",()=>choose(idx,b)));
-  top();
+  toTop();
 }
 
 function choose(idx,btn){
@@ -376,7 +376,7 @@ function result(){
   </section>`;
   const r=document.getElementById("retry"); if(r) r.onclick=()=>begin(wrong);
   document.getElementById("again").onclick=start;
-  top();
+  toTop();
 }
 
 start();
