@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>피드백 리터러시 퀴즈</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap">
+<style>
+/* Layout: 강의 슬라이드 본문 화면을 그대로 옮긴 한 문항 한 화면 카드. 상단 골드→네이비 헤더 바 + 문항 번호 칩. */
+:root{
+  --bg:#FFFFFF; --haze:rgba(43,81,242,.10);
+  --ink:#0E1116; --body:#2A2F3A; --muted:#77818F; --line:#D9DDE6;
+  --card:#F2F5FA; --lav:#EAEDFC; --cream:#FCF6E8; --cream-ink:#8A6414;
+  --blue:#2B51F2; --navy:#1B2A6E; --on-blue:#FFFFFF; --gold:#E0B158; --steel:#294B79;
+  --chip:#0E1116; --chip-ink:#FFFFFF;
+  --ok:#2B51F2; --ok-bg:#EAEDFC; --bad:#C8442F; --bad-bg:#FCEDEA;
+  --shadow:0 6px 14px rgba(27,42,110,.14);
+  --f-body:"IBM Plex Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-quote:"Gowun Batang","AppleMyungjo","Nanum Myeongjo",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1222; --haze:rgba(91,120,255,.16);
+  --ink:#F1F3F8; --body:#D3D8E3; --muted:#8E98AA; --line:#2A3350;
+  --card:#161D33; --lav:#1E2750; --cream:#2A2416; --cream-ink:#E8C47A;
+  --blue:#5B7BFF; --navy:#A9B8FF; --on-blue:#FFFFFF;
+  --chip:#000000; --chip-ink:#FFFFFF;
+  --ok:#7D97FF; --ok-bg:#1E2750; --bad:#FF8A73; --bad-bg:#33201C;
+  --shadow:0 6px 14px rgba(0,0,0,.4); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1222; --haze:rgba(91,120,255,.16);
+  --ink:#F1F3F8; --body:#D3D8E3; --muted:#8E98AA; --line:#2A3350;
+  --card:#161D33; --lav:#1E2750; --cream:#2A2416; --cream-ink:#E8C47A;
+  --blue:#5B7BFF; --navy:#A9B8FF; --on-blue:#FFFFFF;
+  --chip:#000000; --chip-ink:#FFFFFF;
+  --ok:#7D97FF; --ok-bg:#1E2750; --bad:#FF8A73; --bad-bg:#33201C;
+  --shadow:0 6px 14px rgba(0,0,0,.4); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--body);font-family:var(--f-body);
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(60% 70% at 100% 40%,var(--haze),transparent 70%);
+  background-attachment:fixed;
+}
+/* 슬라이드 헤더 바 */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;height:30px;display:flex;align-items:center;
+  background:linear-gradient(90deg,var(--gold),var(--steel));box-shadow:0 2px 6px rgba(0,0,0,.18)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--gold)}
+.bar .chip{height:100%;min-width:38px;padding:0 10px;display:grid;place-items:center;background:var(--chip);color:var(--chip-ink);
+  font-weight:700;font-size:13px;font-variant-numeric:tabular-nums;padding-left:max(10px,env(safe-area-inset-left,0px))}
+.bar .label{padding:0 12px;font-size:13px;font-weight:600;color:#1a1408;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.bar .slogan{padding-right:max(14px,env(safe-area-inset-right,0px));font-family:var(--f-quote);font-style:italic;font-size:13px;color:#fff;white-space:nowrap}
+@media (max-width:420px){.bar .slogan{display:none}}
+
+.wrap{max-width:760px;margin:0 auto;padding-block:28px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* 시작 화면 = 표지 */
+.week{display:inline-block;background:var(--blue);color:var(--on-blue);font-weight:700;letter-spacing:.06em;
+  font-size:14px;padding:6px 20px;border-radius:999px}
+.cover h1{margin:18px 0 0;font-size:clamp(30px,7vw,46px);line-height:1.2;color:var(--ink);font-weight:700;text-wrap:balance;letter-spacing:-.01em}
+.cover h1 b{color:var(--blue);font-weight:700}
+.rule{height:3px;margin:18px 0;background:linear-gradient(90deg,var(--gold),var(--steel));border-radius:2px}
+.cover .sub{margin:0;font-size:clamp(17px,4vw,21px);font-weight:600;color:var(--navy);text-wrap:balance}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
+.meta div{background:var(--card);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.meta div:last-child{background:var(--blue);color:var(--on-blue)}
+.meta small{display:block;font-size:12px;letter-spacing:.04em;opacity:.8}
+.meta strong{font-size:22px;font-variant-numeric:tabular-nums;color:inherit}
+.meta div:not(:last-child) strong{color:var(--ink)}
+.howto{background:var(--lav);border-radius:14px;padding:16px 18px;margin:0 0 24px}
+.howto h2{margin:0 0 6px;font-size:15px;color:var(--blue)}
+.howto ul{margin:0;padding-left:18px}
+.howto li{margin:2px 0}
+.foot{margin-top:28px;font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* 버튼 */
+.btn{appearance:none;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:16px;border-radius:12px;
+  padding:14px 22px;background:var(--blue);color:var(--on-blue);box-shadow:var(--shadow);transition:transform .12s,filter .12s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.btn:focus-visible,.opt:focus-visible,.ox:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn.wide{width:100%}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btns .btn{flex:1 1 180px}
+
+/* 진행 */
+.prog{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.track{flex:1;height:6px;background:var(--line);border-radius:999px;overflow:hidden}
+.fill{height:100%;background:var(--blue);border-radius:999px;transition:width .3s}
+.count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* 문항 */
+.qhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.pill{background:var(--blue);color:var(--on-blue);font-size:13px;font-weight:700;padding:4px 14px;border-radius:999px}
+.pill.mc{background:var(--navy);color:var(--bg)}
+.topic{font-size:13px;color:var(--muted)}
+.q{margin:0 0 20px;font-size:clamp(19px,4.6vw,23px);line-height:1.5;font-weight:700;color:var(--ink);text-wrap:pretty}
+.quote{display:block;margin:10px 0 0;padding:12px 16px;background:var(--card);border-radius:12px;font-family:var(--f-quote);
+  font-weight:400;font-size:.92em;color:var(--body)}
+
+.oxrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ox{appearance:none;border:2px solid transparent;cursor:pointer;background:var(--card);border-radius:16px;box-shadow:var(--shadow);
+  height:120px;display:grid;place-items:center;color:var(--ink);font:inherit;transition:transform .12s,border-color .12s}
+.ox:hover:not(:disabled){border-color:var(--blue)}
+.ox svg{width:56px;height:56px}
+.ox span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+.opts{display:grid;gap:10px}
+.opt{appearance:none;cursor:pointer;text-align:left;font:inherit;font-size:16.5px;color:var(--ink);background:var(--card);
+  border:2px solid transparent;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;box-shadow:var(--shadow);
+  transition:border-color .12s}
+.opt:hover:not(:disabled){border-color:var(--blue)}
+.opt .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--blue);color:var(--on-blue);display:grid;place-items:center;
+  font-size:14px;font-weight:700;margin-top:1px}
+.opt .t{min-width:0}
+button:disabled{cursor:default}
+.is-right{border-color:var(--ok)!important;background:var(--ok-bg)!important}
+.is-wrong{border-color:var(--bad)!important;background:var(--bad-bg)!important}
+.is-wrong .n{background:var(--bad)}
+.is-dim{opacity:.5}
+
+.exp{margin-top:18px;border-radius:14px;padding:16px 18px;background:var(--lav)}
+.exp.bad{background:var(--cream)}
+.verdict{font-weight:700;font-size:17px;margin:0 0 6px;color:var(--ok)}
+.exp.bad .verdict{color:var(--bad)}
+.exp p{margin:0}
+.ans{font-weight:700;color:var(--ink)}
+.src{margin-top:10px!important;font-size:12.5px;color:var(--muted)}
+.next{margin-top:18px}
+
+/* 결과 */
+.score{display:flex;align-items:baseline;gap:8px;margin:14px 0 4px}
+.score strong{font-size:64px;line-height:1;color:var(--blue);font-variant-numeric:tabular-nums}
+.score span{font-size:22px;color:var(--muted)}
+.bar-line{background:var(--navy);color:var(--bg);border-radius:12px;padding:14px 18px;font-weight:600;margin:16px 0 22px}
+.review{display:grid;gap:12px;margin:22px 0}
+.rv{background:var(--card);border-radius:14px;padding:14px 16px}
+.rv.bad{background:var(--cream)}
+.rv h3{margin:0 0 4px;font-size:15.5px;color:var(--ink);line-height:1.5}
+.rv .tag{font-size:12.5px;font-weight:700;color:var(--ok)}
+.rv.bad .tag{color:var(--bad)}
+.rv p{margin:4px 0 0;font-size:14.5px}
+.section-t{font-size:15px;font-weight:700;color:var(--ink);margin:28px 0 0}
+
+@media (max-width:480px){
+  .meta{grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .meta div{padding:12px}
+  .meta strong{font-size:19px}
+  .ox{height:100px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="bar" role="banner">
+  <div class="chip" id="chip">11</div>
+  <div class="label" id="barLabel">11주차 복습 퀴즈</div>
+  <div class="slogan">AI시대 글쓰기의 힘</div>
+</div>
+
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<script>
+const Q = [
+ {t:"ox",topic:"이론 1 · 피드업·피드백·피드포워드",
+  q:"Hattie & Timperley(2007)는 피드백의 목적을 ‘현재의 이해·수행 수준과 원하는 목표 사이의 격차(discrepancy)를 줄이는 것’으로 정의했다.",
+  a:true,
+  e:"피드백의 목적은 지금 내가 있는 위치와 목표 사이의 거리를 줄이는 데 있습니다. 그래서 목표(피드업)가 흐리면 피드백도 방향을 잃습니다.",
+  s:"Hattie & Timperley (2007), Review of Educational Research, 77(1)"},
+ {t:"ox",topic:"이론 1 · 피드업·피드백·피드포워드",
+  q:"‘나는 어디로 가는가?(Where am I going?)’라는 질문에 답하는 것은 피드포워드다.",
+  a:false,
+  e:"이 질문은 목표를 확인하는 피드업(Feed Up)입니다. 피드백은 ‘지금 어떻게 가고 있는가?(How am I going?)’, 피드포워드는 ‘다음에는 무엇을 하는가?(Where to next?)’에 답합니다.",
+  s:"Hattie & Timperley (2007) · 강의자료 7쪽"},
+ {t:"ox",topic:"이론 1 · 실제 적용",
+  q:"“다 널 위한 말이야”처럼 다음에 무엇을 할지 알려 주지 않는 조언은 잔소리나 간섭처럼 들리기 쉽다.",
+  a:true,
+  e:"목표를 향한 다음 행동, 곧 피드포워드가 빠진 조언은 참견으로 들립니다. 받아들일 만한 조언에는 ‘그래서 다음에 무엇을 하나’가 들어 있습니다.",
+  s:"강의자료 7쪽 ‘실제 적용’"},
+ {t:"ox",topic:"심화 · 피드백을 분류하는 단계",
+  q:"피드백을 받으면 자아 수준의 지적(예: “넌 원래 글에 소질이 없어”)부터 먼저 처리해야 한다.",
+  a:false,
+  e:"자아 수준(개인에 대한 평가, 정서적 평가)의 지적은 처리하지 않습니다. 글을 어떻게 고칠지에 대한 정보가 들어 있지 않기 때문입니다. 가장 먼저 처리할 것은 전역이면서 과정 수준인 지적입니다.",
+  s:"강의자료 8쪽 · Hattie & Timperley (2007)"},
+ {t:"ox",topic:"이론 2 · 전역 수정과 국소 수정",
+  q:"Sommers(1980)는 숙련된 필자일수록 주로 단어를 바꾸는 데 집중한다고 관찰했다.",
+  a:false,
+  e:"반대입니다. 단어를 바꾸는 데 머문 쪽은 미숙한 필자였고, 숙련된 필자는 구조를 먼저 다시 봤습니다.",
+  s:"Sommers (1980), College Composition and Communication, 31(4)"},
+ {t:"ox",topic:"이론 2 · 유사 개념과의 구별",
+  q:"국소 수정을 많이 하면 전역 문제도 자연스럽게 해결된다.",
+  a:false,
+  e:"‘많이 고쳤다’와 ‘잘 고쳤다’는 다릅니다. 문장을 아무리 다듬어도 주장·순서·범위의 문제는 그대로 남습니다.",
+  s:"강의자료 16쪽 ‘유사 개념과의 구별’"},
+ {t:"ox",topic:"이론 2 · AI 시대의 해석",
+  q:"AI는 국소 수정을 즉시, 잘하기 때문에 수정 순서를 미리 정해 두지 않으면 국소 수정부터 하게 되기 쉽다.",
+  a:true,
+  e:"“이 글 좀 다듬어 줘”라고 하면 AI는 대개 문장부터 매끄럽게 바꿉니다. AI를 쓸수록 ‘큰 것부터’라는 순서는 내가 먼저 정해야 합니다.",
+  s:"강의자료 16쪽 ‘AI 시대의 해석’"},
+
+ {t:"mc",topic:"이론 1 · 세 가지 질문",
+  q:"Hattie & Timperley 모형에서 ‘지금 어떻게 가고 있는가?(How am I going?)’에 답하는 것은?",
+  o:["피드업(Feed Up)","피드백(Feed Back)","피드포워드(Feed Forward)","자기 조절 수준"],a:1,
+  e:"현재 상태를 점검하는 질문이므로 피드백입니다. 목표 확인은 피드업, 다음 행동은 피드포워드입니다. 자기 조절은 세 질문이 작동하는 네 수준 가운데 하나입니다.",
+  s:"Hattie & Timperley (2007) · 강의자료 7쪽"},
+ {t:"mc",topic:"이론 1 · 세 가지 질문",
+  q:"친구가 이렇게 조언했다. 이 조언은 주로 무엇에 해당하는가?",
+  quote:"“다음 문단에서는 주장 하나마다 근거를 두 개씩 붙여 봐.”",
+  o:["피드업","피드백","피드포워드","자아 수준의 평가"],a:2,
+  e:"‘다음에 무엇을 할지’를 구체적인 행동으로 알려 주므로 피드포워드입니다. 이런 조언은 잔소리로 들리지 않고 바로 실행할 수 있습니다.",
+  s:"강의자료 7쪽"},
+ {t:"mc",topic:"심화 · 피드백의 네 수준",
+  q:"피드백의 네 수준 가운데 ‘행동에 대한 자기 모니터링’에 해당하는 것은?",
+  o:["과제 수준","과정 수준","자기 조절 수준","자아 수준"],a:2,
+  e:"과제 수준은 과제를 얼마나 잘 이해하고 수행했는가, 과정 수준은 수행에 필요한 주요 과정, 자기 조절 수준은 스스로 점검하고 조정하는 일, 자아 수준은 개인에 대한 평가입니다.",
+  s:"강의자료 8쪽 · Hattie & Timperley (2007)"},
+ {t:"mc",topic:"심화 · 처리 순서",
+  q:"글에 대해 다음 네 가지 지적을 받았다. 가장 먼저 처리해야 하는 것은?",
+  o:["“이 문장이 너무 길어요.”","“3쪽에 오타가 있어요.”","“왜 이 근거를 여기에 두었나요?”","“글을 참 성의 없이 쓰네요.”"],a:2,
+  e:"근거의 위치를 묻는 지적은 글 전체의 논리 전개에 걸린 전역 × 과정 수준의 지적입니다. ①②는 국소 × 과제 수준이라 나중에, ④는 자아 수준이라 처리하지 않습니다.",
+  s:"강의자료 8쪽 ‘먼저 처리해야 할 것 / 나중에 처리해야 할 것’"},
+ {t:"mc",topic:"읽기 자료 · 『글이 삶이다』 2부 5",
+  q:"『글이 삶이다』가 제시하는 고쳐쓰기의 검토 순서로 옳은 것은?",
+  o:["단어 → 문장 → 문단 → 전체 글","전체 글 → 문단 → 문장 → 단어","문단 → 전체 글 → 문장 → 단어","문장 → 단어 → 문단 → 전체 글"],a:1,
+  e:"고쳐쓰기는 큰 것에서 작은 것 순서로 합니다. 그리고 앞 순서에서 고칠 것을 마친 뒤에야 다음 순서로 넘어갑니다.",
+  s:"『글이 삶이다』(전면개정판) 132–133쪽"},
+ {t:"mc",topic:"이론 2 · 전역 수정과 국소 수정",
+  q:"다음 가운데 전역 수정에 해당하는 것은?",
+  o:["어색한 조사를 고친다.","맞춤법을 바로잡는다.","둘째 문단과 넷째 문단의 순서를 바꾼다.","비슷한 단어를 더 정확한 단어로 바꾼다."],a:2,
+  e:"전역 수정은 주장·순서·범위를 바꾸는 일입니다. 나머지 셋은 문장과 단어를 다듬는 국소 수정입니다.",
+  s:"Sommers (1980) · 강의자료 16쪽"},
+ {t:"mc",topic:"사례 · 논문 심사 소견",
+  q:"강의에서 본 논문 심사 소견의 지적 가운데 국소 수정으로 처리할 수 있는 것은?",
+  o:["논리 전개와 실재성 논증의 취약성","교육 실험의 방법론적 결함","장절의 구조적 구분이 모호함","표기·문장·인용의 비일관성"],a:3,
+  e:"표기·문장·인용을 통일하는 일은 문장과 단어 단위에서 끝나는 국소 수정입니다. ①②③은 논리 구조와 연구 설계를 다시 짜야 하는 전역 수정이므로 먼저 처리합니다.",
+  s:"강의자료 8쪽 심사 소견 사례"},
+ {t:"mc",topic:"이론 2 · 피드백 처리 3단계",
+  q:"복합적인 심사 피드백을 받았다. 1단계로 피드백을 전역/국소로 분류한 뒤, 2단계에서 할 일은?",
+  o:["오탈자부터 하나씩 고친다.","주장 보강, 장절 재배치, 범위 조정을 먼저 끝낸다.","확정된 본문의 단어를 최종 교정한다.","자아 수준의 지적에 반박하는 답장을 쓴다."],a:1,
+  e:"2단계는 거시적 구조 개편입니다. 뼈대가 확정된 다음 3단계에서 문장 표현과 단어를 다듬습니다.",
+  s:"강의자료 16쪽 1–3단계"},
+ {t:"mc",topic:"이론 2 · 주의할 점",
+  q:"국소 수정을 먼저 하면 안 되는 ‘진짜 이유’로 강의에서 든 것은?",
+  o:["AI가 국소 수정을 하지 못하기 때문에","다듬은 문장이 아까워서 구조를 바꾸지 못하게 되기 때문에","국소 수정은 평가에 반영되지 않기 때문에","문장은 마지막에 독자가 고쳐 주기 때문에"],a:1,
+  e:"공들여 다듬은 문장이 아까우면 문단을 옮기거나 지우는 결정을 미루게 됩니다. 문단 순서를 바꾸면 다듬은 문장이 통째로 사라지기도 합니다.",
+  s:"강의자료 16쪽 ‘주의할 점’"}
+];
+
+const app = document.getElementById("app");
+const chip = document.getElementById("chip");
+const barLabel = document.getElementById("barLabel");
+const CIRCLED = ["①","②","③","④","⑤"];
+const OX_SVG = {
+  o:'<svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="20" fill="none" stroke="currentColor" stroke-width="6"/></svg>',
+  x:'<svg viewBox="0 0 56 56" aria-hidden="true"><path d="M12 12L44 44M44 12L12 44" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/></svg>'
+};
+let order = [], pos = 0, answers = {};
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function ansText(item){return item.t==="ox" ? (item.a?"O":"X") : CIRCLED[item.a]+" "+item.o[item.a]}
+function top(){window.scrollTo({top:0,behavior:"auto"})}
+
+function start(){
+  chip.textContent="11"; barLabel.textContent="11주차 복습 퀴즈";
+  const nOx=Q.filter(x=>x.t==="ox").length, nMc=Q.length-nOx;
+  app.innerHTML=`
+  <section class="cover">
+    <span class="week">WEEK 11 · 복습 퀴즈</span>
+    <h1>피드백 리터러시와 <b>실질적 수정</b></h1>
+    <div class="rule"></div>
+    <p class="sub">무엇을 받아들이고 무엇을 거절할 것인가</p>
+    <div class="meta">
+      <div><small>OX</small><strong>${nOx}문항</strong></div>
+      <div><small>다지선다</small><strong>${nMc}문항</strong></div>
+      <div><small>예상 시간</small><strong>8분</strong></div>
+    </div>
+    <div class="howto">
+      <h2>푸는 방법</h2>
+      <ul>
+        <li>한 화면에 한 문항씩 나옵니다. 답을 고르면 바로 정답과 해설이 보입니다.</li>
+        <li>답은 고른 뒤에 바꿀 수 없습니다. 해설을 읽고 다음 문제로 넘어가세요.</li>
+        <li>끝나면 점수와 틀린 문제의 해설을 한 번에 다시 볼 수 있습니다.</li>
+      </ul>
+    </div>
+    <button class="btn wide" id="go">시작하기</button>
+    <p class="foot">범위: 이론 1 피드업·피드백·피드포워드(Hattie &amp; Timperley, 2007) · 심화 피드백을 분류하는 단계 · 읽기 자료 『글이 삶이다』 2부 5 고쳐쓰기 · 이론 2 전역 수정과 국소 수정(Sommers, 1980)<br>유환일(한양대학교 교양국어위원회) · AI시대 글쓰기의 힘 · 2026-2학기</p>
+  </section>`;
+  document.getElementById("go").onclick=()=>begin(Q.map((_,i)=>i));
+  top();
+}
+
+function begin(list){order=list; pos=0; answers={}; render();}
+
+function render(){
+  const idx=order[pos], item=Q[idx], n=pos+1;
+  chip.textContent=n; barLabel.textContent=item.topic;
+  const pct=(pos/order.length)*100;
+  let body;
+  if(item.t==="ox"){
+    body=`<div class="oxrow">
+      <button class="ox" data-v="1" id="ox-o">${OX_SVG.o}<span>O 맞다</span></button>
+      <button class="ox" data-v="0" id="ox-x">${OX_SVG.x}<span>X 틀리다</span></button></div>`;
+  }else{
+    body=`<div class="opts">${item.o.map((o,i)=>`<button class="opt" data-v="${i}" id="opt-${i}"><span class="n">${i+1}</span><span class="t">${esc(o)}</span></button>`).join("")}</div>`;
+  }
+  app.innerHTML=`
+  <div class="prog"><div class="track"><div class="fill" style="width:${pct}%"></div></div><span class="count">${n} / ${order.length}</span></div>
+  <div class="qhead"><span class="pill ${item.t==="mc"?"mc":""}">${item.t==="ox"?"OX":"다지선다"}</span><span class="topic">${esc(item.topic)}</span></div>
+  <p class="q">${esc(item.q)}${item.quote?`<span class="quote">${esc(item.quote)}</span>`:""}</p>
+  ${body}
+  <div id="after"></div>`;
+  app.querySelectorAll("[data-v]").forEach(b=>b.addEventListener("click",()=>choose(idx,b)));
+  top();
+}
+
+function choose(idx,btn){
+  const item=Q[idx];
+  const v=Number(btn.dataset.v);
+  const correct = item.t==="ox" ? (v===1)===item.a : v===item.a;
+  answers[idx]={v,correct};
+  const rightV = item.t==="ox" ? (item.a?1:0) : item.a;
+  app.querySelectorAll("[data-v]").forEach(b=>{
+    b.disabled=true;
+    const bv=Number(b.dataset.v);
+    if(bv===rightV) b.classList.add("is-right");
+    else if(b===btn) b.classList.add("is-wrong");
+    else b.classList.add("is-dim");
+  });
+  const last = pos===order.length-1;
+  document.getElementById("after").innerHTML=`
+    <div class="exp ${correct?"":"bad"}">
+      <p class="verdict">${correct?"정답입니다.":"아쉽네요. 다시 짚어 볼까요?"}</p>
+      <p><span class="ans">정답 ${esc(ansText(item))}</span></p>
+      <p style="margin-top:6px">${esc(item.e)}</p>
+      <p class="src">근거: ${esc(item.s)}</p>
+    </div>
+    <button class="btn wide next" id="next">${last?"결과 보기":"다음 문제"}</button>`;
+  const nx=document.getElementById("next");
+  nx.onclick=()=>{ if(last) result(); else {pos++; render();} };
+  nx.focus({preventScroll:true});
+  document.getElementById("after").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function result(){
+  chip.textContent="✓"; barLabel.textContent="결과";
+  const total=order.length, right=order.filter(i=>answers[i]&&answers[i].correct).length;
+  const wrong=order.filter(i=>!(answers[i]&&answers[i].correct));
+  const msg = right===total ? "모두 맞혔습니다. 오늘 배운 처리 순서를 답장 쓰기에서도 그대로 써 보세요."
+    : right/total>=.75 ? "대부분 이해했습니다. 틀린 문항의 해설만 다시 읽고 넘어가세요."
+    : right/total>=.5 ? "개념은 잡혔지만 구분이 흔들립니다. 틀린 문제만 다시 풀어 보세요."
+    : "피드업·피드백·피드포워드와 전역·국소 수정의 구분을 강의자료로 다시 확인해 보세요.";
+  const card=i=>{const it=Q[i],ok=answers[i]&&answers[i].correct;
+    return `<div class="rv ${ok?"":"bad"}"><span class="tag">${ok?"맞음":"틀림"} · ${it.t==="ox"?"OX":"다지선다"}</span>
+      <h3>${esc(it.q)}${it.quote?" "+esc(it.quote):""}</h3>
+      <p><b>정답 ${esc(ansText(it))}</b></p><p>${esc(it.e)}</p></div>`};
+  app.innerHTML=`
+  <section>
+    <span class="week">WEEK 11 · 결과</span>
+    <div class="score"><strong>${right}</strong><span>/ ${total}</span></div>
+    <div class="rule"></div>
+    <div class="bar-line">${msg}</div>
+    <div class="btns">
+      ${wrong.length?`<button class="btn" id="retry">틀린 ${wrong.length}문항 다시 풀기</button>`:""}
+      <button class="btn ghost" id="again">처음부터 다시</button>
+    </div>
+    ${wrong.length?`<p class="section-t">틀린 문제 해설</p><div class="review">${wrong.map(card).join("")}</div>`:""}
+    ${right?`<p class="section-t">맞힌 문제</p><div class="review">${order.filter(i=>!wrong.includes(i)).map(card).join("")}</div>`:""}
+  </section>`;
+  const r=document.getElementById("retry"); if(r) r.onclick=()=>begin(wrong);
+  document.getElementById("again").onclick=start;
+  top();
+}
+
+start();
+</script>
+</body>
+</html>
