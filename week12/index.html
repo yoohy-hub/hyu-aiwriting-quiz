@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>문체·목소리·응집성 퀴즈</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap">
+<style>
+/* Layout: 강의 슬라이드 본문 화면을 그대로 옮긴 한 문항 한 화면 카드. 상단 골드→네이비 헤더 바 + 문항 번호 칩. */
+:root{
+  --bg:#FFFFFF; --haze:rgba(43,81,242,.10);
+  --ink:#0E1116; --body:#2A2F3A; --muted:#77818F; --line:#D9DDE6;
+  --card:#F2F5FA; --lav:#EAEDFC; --cream:#FCF6E8; --cream-ink:#8A6414;
+  --blue:#2B51F2; --navy:#1B2A6E; --on-blue:#FFFFFF; --gold:#E0B158; --steel:#294B79;
+  --chip:#0E1116; --chip-ink:#FFFFFF;
+  --ok:#2B51F2; --ok-bg:#EAEDFC; --bad:#C8442F; --bad-bg:#FCEDEA;
+  --shadow:0 6px 14px rgba(27,42,110,.14);
+  --f-body:"IBM Plex Sans KR","Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-quote:"Gowun Batang","AppleMyungjo","Nanum Myeongjo",serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0D1222; --haze:rgba(91,120,255,.16);
+  --ink:#F1F3F8; --body:#D3D8E3; --muted:#8E98AA; --line:#2A3350;
+  --card:#161D33; --lav:#1E2750; --cream:#2A2416; --cream-ink:#E8C47A;
+  --blue:#5B7BFF; --navy:#A9B8FF; --on-blue:#FFFFFF;
+  --chip:#000000; --chip-ink:#FFFFFF;
+  --ok:#7D97FF; --ok-bg:#1E2750; --bad:#FF8A73; --bad-bg:#33201C;
+  --shadow:0 6px 14px rgba(0,0,0,.4); color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0D1222; --haze:rgba(91,120,255,.16);
+  --ink:#F1F3F8; --body:#D3D8E3; --muted:#8E98AA; --line:#2A3350;
+  --card:#161D33; --lav:#1E2750; --cream:#2A2416; --cream-ink:#E8C47A;
+  --blue:#5B7BFF; --navy:#A9B8FF; --on-blue:#FFFFFF;
+  --chip:#000000; --chip-ink:#FFFFFF;
+  --ok:#7D97FF; --ok-bg:#1E2750; --bad:#FF8A73; --bad-bg:#33201C;
+  --shadow:0 6px 14px rgba(0,0,0,.4); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--body);font-family:var(--f-body);
+  font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;
+  background-image:radial-gradient(60% 70% at 100% 40%,var(--haze),transparent 70%);
+  background-attachment:fixed;
+}
+/* 슬라이드 헤더 바 */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;height:30px;display:flex;align-items:center;
+  background:linear-gradient(90deg,var(--gold),var(--steel));box-shadow:0 2px 6px rgba(0,0,0,.18)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--gold)}
+.bar .chip{height:100%;min-width:38px;padding:0 10px;display:grid;place-items:center;background:var(--chip);color:var(--chip-ink);
+  font-weight:700;font-size:13px;font-variant-numeric:tabular-nums;padding-left:max(10px,env(safe-area-inset-left,0px))}
+.bar .label{padding:0 12px;font-size:13px;font-weight:600;color:#1a1408;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.bar .slogan{padding-right:max(14px,env(safe-area-inset-right,0px));font-family:var(--f-quote);font-style:italic;font-size:13px;color:#fff;white-space:nowrap}
+@media (max-width:420px){.bar .slogan{display:none}}
+
+.wrap{max-width:760px;margin:0 auto;padding-block:28px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* 시작 화면 = 표지 */
+.week{display:inline-block;background:var(--blue);color:var(--on-blue);font-weight:700;letter-spacing:.06em;
+  font-size:14px;padding:6px 20px;border-radius:999px}
+.cover h1{margin:18px 0 0;font-size:clamp(30px,7vw,46px);line-height:1.2;color:var(--ink);font-weight:700;text-wrap:balance;letter-spacing:-.01em}
+.cover h1 b{color:var(--blue);font-weight:700}
+.rule{height:3px;margin:18px 0;background:linear-gradient(90deg,var(--gold),var(--steel));border-radius:2px}
+.cover .sub{margin:0;font-size:clamp(17px,4vw,21px);font-weight:600;color:var(--navy);text-wrap:balance}
+.meta{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
+.meta div{background:var(--card);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.meta div:last-child{background:var(--blue);color:var(--on-blue)}
+.meta small{display:block;font-size:12px;letter-spacing:.04em;opacity:.8}
+.meta strong{font-size:22px;font-variant-numeric:tabular-nums;color:inherit}
+.meta div:not(:last-child) strong{color:var(--ink)}
+.howto{background:var(--lav);border-radius:14px;padding:16px 18px;margin:0 0 24px}
+.howto h2{margin:0 0 6px;font-size:15px;color:var(--blue)}
+.howto ul{margin:0;padding-left:18px}
+.howto li{margin:2px 0}
+.foot{margin-top:28px;font-size:12.5px;color:var(--muted);line-height:1.6}
+
+/* 버튼 */
+.btn{appearance:none;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:16px;border-radius:12px;
+  padding:14px 22px;background:var(--blue);color:var(--on-blue);box-shadow:var(--shadow);transition:transform .12s,filter .12s}
+.btn:hover{filter:brightness(1.06)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.btn:focus-visible,.opt:focus-visible,.ox:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn.wide{width:100%}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.btns .btn{flex:1 1 180px}
+
+/* 진행 */
+.prog{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.track{flex:1;height:6px;background:var(--line);border-radius:999px;overflow:hidden}
+.fill{height:100%;background:var(--blue);border-radius:999px;transition:width .3s}
+.count{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* 문항 */
+.qhead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.pill{background:var(--blue);color:var(--on-blue);font-size:13px;font-weight:700;padding:4px 14px;border-radius:999px}
+.pill.mc{background:var(--navy);color:var(--bg)}
+.topic{font-size:13px;color:var(--muted)}
+.q{margin:0 0 20px;font-size:clamp(19px,4.6vw,23px);line-height:1.5;font-weight:700;color:var(--ink);text-wrap:pretty}
+.quote{display:block;margin:10px 0 0;padding:12px 16px;background:var(--card);border-radius:12px;font-family:var(--f-quote);
+  font-weight:400;font-size:.92em;color:var(--body)}
+
+.oxrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ox{appearance:none;border:2px solid transparent;cursor:pointer;background:var(--card);border-radius:16px;box-shadow:var(--shadow);
+  height:120px;display:grid;place-items:center;color:var(--ink);font:inherit;transition:transform .12s,border-color .12s}
+.ox:hover:not(:disabled){border-color:var(--blue)}
+.ox svg{width:56px;height:56px}
+.ox span{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+.opts{display:grid;gap:10px}
+.opt{appearance:none;cursor:pointer;text-align:left;font:inherit;font-size:16.5px;color:var(--ink);background:var(--card);
+  border:2px solid transparent;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start;box-shadow:var(--shadow);
+  transition:border-color .12s}
+.opt:hover:not(:disabled){border-color:var(--blue)}
+.opt .n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--blue);color:var(--on-blue);display:grid;place-items:center;
+  font-size:14px;font-weight:700;margin-top:1px}
+.opt .t{min-width:0}
+button:disabled{cursor:default}
+.is-right{border-color:var(--ok)!important;background:var(--ok-bg)!important}
+.is-wrong{border-color:var(--bad)!important;background:var(--bad-bg)!important}
+.is-wrong .n{background:var(--bad)}
+.is-dim{opacity:.5}
+
+.exp{margin-top:18px;border-radius:14px;padding:16px 18px;background:var(--lav)}
+.exp.bad{background:var(--cream)}
+.verdict{font-weight:700;font-size:17px;margin:0 0 6px;color:var(--ok)}
+.exp.bad .verdict{color:var(--bad)}
+.exp p{margin:0}
+.ans{font-weight:700;color:var(--ink)}
+.src{margin-top:10px!important;font-size:12.5px;color:var(--muted)}
+.next{margin-top:18px}
+
+/* 결과 */
+.score{display:flex;align-items:baseline;gap:8px;margin:14px 0 4px}
+.score strong{font-size:64px;line-height:1;color:var(--blue);font-variant-numeric:tabular-nums}
+.score span{font-size:22px;color:var(--muted)}
+.bar-line{background:var(--navy);color:var(--bg);border-radius:12px;padding:14px 18px;font-weight:600;margin:16px 0 22px}
+.review{display:grid;gap:12px;margin:22px 0}
+.rv{background:var(--card);border-radius:14px;padding:14px 16px}
+.rv.bad{background:var(--cream)}
+.rv h3{margin:0 0 4px;font-size:15.5px;color:var(--ink);line-height:1.5}
+.rv .tag{font-size:12.5px;font-weight:700;color:var(--ok)}
+.rv.bad .tag{color:var(--bad)}
+.rv p{margin:4px 0 0;font-size:14.5px}
+.section-t{font-size:15px;font-weight:700;color:var(--ink);margin:28px 0 0}
+
+@media (max-width:480px){
+  .meta{grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .meta div{padding:12px}
+  .meta strong{font-size:19px}
+  .ox{height:100px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="bar" role="banner">
+  <div class="chip" id="chip">12</div>
+  <div class="label" id="barLabel">12주차 복습 퀴즈</div>
+  <div class="slogan">AI시대 글쓰기의 힘</div>
+</div>
+
+<main class="wrap" id="app" aria-live="polite"></main>
+
+<script>
+const Q = [
+ {t:"ox",topic:"이론 1 · 7C 문체 기준",
+  q:"7C 문체 기준은 Cutlip과 Center가 1952년에 펴낸 『Effective Public Relations』에서 처음 등장했고, 이후 수정·변형되어 여러 분야에서 응용되고 있다.",
+  a:true,
+  e:"7C는 홍보(PR) 분야의 책에서 처음 나왔습니다. 지금은 비즈니스 글쓰기, 보고서, 이메일 같은 실무 커뮤니케이션에서 메시지를 효과적으로 전달하기 위한 원칙으로 바뀌어 쓰이고 있습니다.",
+  s:"Cutlip & Center (1952) · 강의자료 ‘7C 문체 기준’"},
+ {t:"ox",topic:"이론 1 · 7C 문체 기준",
+  q:"7C 가운데 ‘응집성’은 현대 실무 보고서와 논리적 글쓰기 환경에 맞게 기준이 진화하면서 추가된 핵심 기준이다.",
+  a:true,
+  e:"응집성은 문장과 문단 사이의 논리적 흐름이 자연스럽게 이어지도록 구성하는 일입니다. 강의에서는 이 기준이 나중에 더해졌다는 점을 따로 짚었습니다.",
+  s:"강의자료 ‘7C 문체 기준’"},
+ {t:"ox",topic:"이론 1 · 7C 문체 기준",
+  q:"‘구체성’은 불필요한 수식어와 중복 표현을 덜어 내어 글을 짧게 만드는 기준이다.",
+  a:false,
+  e:"수식어와 중복 표현을 덜어 내는 것은 ‘간결성’입니다. ‘구체성’은 추상적인 주장 대신 정확한 수치, 사실, 실증적 사례를 제시하는 기준입니다.",
+  s:"강의자료 ‘7C 문체 기준’"},
+ {t:"ox",topic:"교재 원문 · 주교재 13.3",
+  q:"주교재 13.3에 따르면 문단 사이의 응집성은 문단 안의 응집성보다 확보하기 쉽다.",
+  a:false,
+  e:"반대입니다. 문단 안의 응집성은 주제와 요점 구조를 따르면 개선할 수 있지만, 문단 사이의 응집성을 확보하는 일은 조금 더 까다롭다고 했습니다.",
+  s:"Johannesson (2024), 13.3 Coherence Among Paragraphs"},
+ {t:"ox",topic:"심화 · 문단 사이의 응집성 판단",
+  q:"각 문단의 요약문만 이어 읽었을 때 끊기거나 겹치는 곳이 있다면, 그 자리가 수정해야 할 곳이다.",
+  a:true,
+  e:"요약문만 읽어도 하나의 글이 되면 응집성이 있는 것입니다. 흐름이 끊기는 곳은 연결이 빠진 자리이고, 내용이 겹치는 곳은 두 문단이 같은 일을 하고 있는 자리입니다.",
+  s:"강의자료 ‘심화 · 문단 사이의 응집성을 판단하는 법’"},
+ {t:"ox",topic:"이론 1 · 노랫말의 문체",
+  q:"장소원(2015)의 분석에서 ‘사랑’이라는 낱말은 해방 이전보다 1990년 이후의 노랫말에서 훨씬 자주 나타났다.",
+  a:true,
+  e:"‘사랑’은 해방 이전 17번에서 1990년 이후 287번으로 늘었습니다. ‘이별·눈물·추억’도 꾸준히 늘었습니다.",
+  s:"장소원 (2015), 텍스트언어학 39 · 강의자료 ‘노랫말의 문체’"},
+ {t:"ox",topic:"글쓰기 실습 · 가사 이어쓰기",
+  q:"가사 이어쓰기 실습에서 후렴을 어디에 넣을지는 조장이 정한다.",
+  a:false,
+  e:"첫 절을 다 쓰면 후렴을 적는데, 후렴을 어디에 넣을지는 개인의 판단에 맡깁니다.",
+  s:"강의자료 ‘가사 이어쓰기’ 그룹 작성 2"},
+
+ {t:"mc",topic:"이론 1 · 7C 문체 기준",
+  q:"‘독자의 입장과 상황을 존중하는 정중하고 긍정적인 어조를 사용한다’에 해당하는 7C 기준은?",
+  o:["명확성","완전성","배려","정확성"],a:2,
+  e:"배려(Consideration)입니다. 명확성은 쉬운 단어와 직접적인 표현, 완전성은 필요한 핵심 정보를 빠짐없이 담는 것, 정확성은 맞춤법·문법·구두점 같은 어문 규범을 지키는 것입니다.",
+  s:"강의자료 ‘7C 문체 기준’"},
+ {t:"mc",topic:"이론 1 · 7C 문체 기준",
+  q:"동아리 행사 기획안을 검토한 선배가 이렇게 말했다. 이 지적은 7C의 어느 기준에 해당하는가?",
+  quote:"“날짜와 장소는 있는데 예산이 얼마 드는지가 없어서 승인할지 말지 결정을 못 하겠어.”",
+  o:["간결성","완전성","구체성","응집성"],a:1,
+  e:"독자가 의사결정을 내리는 데 필요한 핵심 정보가 빠졌다는 지적이므로 완전성입니다. 예산이 있기는 한데 ‘적당히 든다’처럼 막연하게 적혀 있었다면 구체성의 문제였을 것입니다.",
+  s:"강의자료 ‘7C 문체 기준’"},
+ {t:"mc",topic:"이론 1 · 7C 문체 기준",
+  q:"다음과 같이 고친 것은 7C의 어느 기준을 살린 수정인가? (예시 문장)",
+  quote:"“요즘 학생들은 AI를 많이 쓴다.” → “우리 반 30명 중 22명이 과제에 AI를 일주일에 세 번 이상 쓴다고 답했다.”",
+  o:["구체성","간결성","배려","응집성"],a:0,
+  e:"막연한 ‘많이’를 정확한 수치와 사실로 바꿨으므로 구체성입니다. 문장은 오히려 길어졌으니 간결성을 살린 수정은 아닙니다.",
+  s:"강의자료 ‘7C 문체 기준’"},
+ {t:"mc",topic:"교재 원문 · 주교재 13.3",
+  q:"주교재 13.3이 문단 사이의 응집성을 점검하는 방법으로 제시한 것은?",
+  o:["맞춤법 검사기로 문단마다 오류를 찾는다.","모든 문단의 길이를 비슷하게 맞춘다.","AI의 요약 기능으로 각 문단을 압축한 뒤, 그 결과가 글 전체의 일관되고 논리적인 요약이 되는지 확인한다.","문단마다 첫머리에 ‘그리고’, ‘따라서’ 같은 접속어를 넣는다."],a:2,
+  e:"ChatGPT 같은 AI 도구의 요약 기능으로 각 문단을 줄이고, 그렇게 나온 텍스트가 전체 글의 요약으로 읽히는지 확인하는 방법입니다. 접속어를 붙인다고 문단 사이의 논리가 생기지는 않습니다.",
+  s:"Johannesson (2024), 13.3 · 강의자료 ‘내 글의 응집성 체크’"},
+ {t:"mc",topic:"심화 · 문단 사이의 응집성 판단",
+  q:"문단 사이의 응집성을 판단하는 3단계를 순서대로 바르게 나열한 것은?",
+  o:["통독 → 요약 → 나열","요약 → 나열 → 통독","나열 → 통독 → 요약","요약 → 통독 → 나열"],a:1,
+  e:"각 문단을 한 줄로 요약하고(요약), 요약문을 순서대로 늘어놓은 다음(나열), 그 요약문만 읽어 봅니다(통독). 강의에서는 서혜진(2019) 논문을 이 방법으로 정리한 예를 보았습니다.",
+  s:"강의자료 ‘심화 · 문단 사이의 응집성을 판단하는 법’"},
+ {t:"mc",topic:"이론 1 · 노랫말의 문체",
+  q:"장소원(2015)이 제시한 시기별 고빈도 어휘 가운데 1970–80년대에 해당하는 것은?",
+  o:["나그네 · 한숨 · 타향 · 고향","바보 · 진실 · 전화 · 표정","포기 · 상상 · 이상형 · 귀찮다","사랑 · 이별 · 눈물 · 추억"],a:1,
+  e:"1970–80년대에는 생활을 비추는 일상어가 노랫말에 들어왔습니다. ①은 1960년대까지의 시적이고 감성적인 낱말, ③은 1990년대 이후 노랫말의 기본이 된 일상어, ④는 특정 시기가 아니라 해방 이전부터 꾸준히 늘어난 낱말입니다.",
+  s:"장소원 (2015) · 강의자료 ‘노랫말의 문체’"},
+ {t:"mc",topic:"이론 1 · 노랫말의 문체",
+  q:"장소원(2015)이 정리한 노랫말의 문장 끝맺음 변화에서, 1990년대 이후에 두드러진 것은?",
+  o:["‘-노라’, ‘-나이다’","반말 ‘-어’","‘-ㄹ 거야’","반말 명령문"],a:3,
+  e:"끝맺음은 ‘-노라·-나이다’에서 해방 뒤 반말 ‘-어’로, 1970년대 ‘-ㄹ 거야’로, 1990년대 이후 반말 명령문으로 바뀌었습니다.",
+  s:"장소원 (2015) · 강의자료 ‘노랫말의 문체’"},
+ {t:"mc",topic:"그룹 토론 · 노랫말의 문체적 특징",
+  q:"그룹 토론 Q3에서 악뮤 「기쁨, 슬픔, 아름다운 마음」의 응집성을 확인한 방법은?",
+  o:["절마다 한 문장으로 줄였을 때 후렴과 제목으로 모이는지 본다.","가사에 쓰인 감성어의 개수를 센다.","부름말이 몇 번 나오는지 센다.","AI에게 가사의 맞춤법을 검사하게 한다."],a:0,
+  e:"심화에서 배운 ‘요약 → 나열 → 통독’을 노랫말에 적용한 질문입니다. 각 절의 요약이 후렴과 제목으로 수렴하면 가사가 한 방향으로 모여 있다는 뜻입니다.",
+  s:"강의자료 ‘그룹 토론’ Q3"},
+ {t:"mc",topic:"글쓰기 실습 · 가사 이어쓰기",
+  q:"가사 이어쓰기의 ‘그룹 작성’ 단계에 대한 설명으로 맞는 것은?",
+  o:["AI가 첫 절을 쓰면 팀원들이 문장을 다듬는다.","팀원이 각자 가사를 완성한 뒤 가장 좋은 것을 고른다.","팀원이 순서대로 한 마디씩 적고, 다음 사람이 앞 사람의 가사를 이어받는다.","후렴을 먼저 쓰고 절은 쓰지 않는다."],a:2,
+  e:"메모지를 활용해 순서대로 한 마디씩 이어 씁니다. 첫 절을 쓰고, 후렴을 적고, 둘째 절을 쓰는 동안 응집성과 7C 문체 기준에 유의합니다. AI 도구는 마지막 ‘전체 공유’ 단계에서 노래를 만들 때 씁니다.",
+  s:"강의자료 ‘가사 이어쓰기’"},
+ {t:"mc",topic:"글쓰기 실습 · 가사 이어쓰기",
+  q:"가사 이어쓰기의 ‘그룹 토론’ 단계에서 부를 상대와 말투를 정할 때 제시된 선택지로 맞는 것은?",
+  o:["상대: 여러분 · 우리 / 끝맺음: -다 · -ㅂ니다","상대: 너 · 그대 · 당신 / 끝맺음: -네 · -어 · -요","상대: 너 · 당신 / 끝맺음: -노라 · -나이다","상대: 정하지 않음 / 끝맺음: 자유"],a:1,
+  e:"상대는 너·그대·당신 가운데 하나, 끝맺음은 ‘-네·-어·-요’ 가운데 하나를 고릅니다. 부름말과 끝맺음을 처음에 정해 두면 여러 사람이 이어 써도 목소리가 흔들리지 않습니다.",
+  s:"강의자료 ‘가사 이어쓰기’ 그룹 토론 2"}
+];
+
+const app = document.getElementById("app");
+const chip = document.getElementById("chip");
+const barLabel = document.getElementById("barLabel");
+const CIRCLED = ["①","②","③","④","⑤"];
+const OX_SVG = {
+  o:'<svg viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="20" fill="none" stroke="currentColor" stroke-width="6"/></svg>',
+  x:'<svg viewBox="0 0 56 56" aria-hidden="true"><path d="M12 12L44 44M44 12L12 44" stroke="currentColor" stroke-width="6" stroke-linecap="round" fill="none"/></svg>'
+};
+let order = [], pos = 0, answers = {};
+
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function ansText(item){return item.t==="ox" ? (item.a?"O":"X") : CIRCLED[item.a]+" "+item.o[item.a]}
+function goTop(){window.scrollTo({top:0,behavior:"auto"})}
+
+function start(){
+  chip.textContent="12"; barLabel.textContent="12주차 복습 퀴즈";
+  const nOx=Q.filter(x=>x.t==="ox").length, nMc=Q.length-nOx;
+  app.innerHTML=`
+  <section class="cover">
+    <span class="week">WEEK 12 · 복습 퀴즈</span>
+    <h1>문체 · 목소리 · <b>응집성</b></h1>
+    <div class="rule"></div>
+    <p class="sub">매끄러움보다 일관성 · 노래 가사로 읽고 쓰기</p>
+    <div class="meta">
+      <div><small>OX</small><strong>${nOx}문항</strong></div>
+      <div><small>다지선다</small><strong>${nMc}문항</strong></div>
+      <div><small>예상 시간</small><strong>9분</strong></div>
+    </div>
+    <div class="howto">
+      <h2>푸는 방법</h2>
+      <ul>
+        <li>한 화면에 한 문항씩 나옵니다. 답을 고르면 바로 정답과 해설이 보입니다.</li>
+        <li>답은 고른 뒤에 바꿀 수 없습니다. 해설을 읽고 다음 문제로 넘어가세요.</li>
+        <li>끝나면 점수와 틀린 문제의 해설을 한 번에 다시 볼 수 있습니다.</li>
+      </ul>
+    </div>
+    <button class="btn wide" id="go">시작하기</button>
+    <p class="foot">범위: 이론 1 7C 문체 기준(Cutlip &amp; Center, 1952) · 교재 원문 주교재 13.3 Coherence Among Paragraphs(Johannesson, 2024) · 심화 문단 사이의 응집성 판단 · 노랫말의 문체(장소원, 2015) · 그룹 토론 · 글쓰기 실습 가사 이어쓰기<br>유환일(한양대학교 교양국어위원회) · AI시대 글쓰기의 힘 · 2026-2학기</p>
+  </section>`;
+  document.getElementById("go").onclick=()=>begin(Q.map((_,i)=>i));
+  goTop();
+}
+
+function begin(list){order=list; pos=0; answers={}; render();}
+
+function render(){
+  const idx=order[pos], item=Q[idx], n=pos+1;
+  chip.textContent=n; barLabel.textContent=item.topic;
+  const pct=(pos/order.length)*100;
+  let body;
+  if(item.t==="ox"){
+    body=`<div class="oxrow">
+      <button class="ox" data-v="1" id="ox-o">${OX_SVG.o}<span>O 맞다</span></button>
+      <button class="ox" data-v="0" id="ox-x">${OX_SVG.x}<span>X 틀리다</span></button></div>`;
+  }else{
+    body=`<div class="opts">${item.o.map((o,i)=>`<button class="opt" data-v="${i}" id="opt-${i}"><span class="n">${i+1}</span><span class="t">${esc(o)}</span></button>`).join("")}</div>`;
+  }
+  app.innerHTML=`
+  <div class="prog"><div class="track"><div class="fill" style="width:${pct}%"></div></div><span class="count">${n} / ${order.length}</span></div>
+  <div class="qhead"><span class="pill ${item.t==="mc"?"mc":""}">${item.t==="ox"?"OX":"다지선다"}</span><span class="topic">${esc(item.topic)}</span></div>
+  <p class="q">${esc(item.q)}${item.quote?`<span class="quote">${esc(item.quote)}</span>`:""}</p>
+  ${body}
+  <div id="after"></div>`;
+  app.querySelectorAll("[data-v]").forEach(b=>b.addEventListener("click",()=>choose(idx,b)));
+  goTop();
+}
+
+function choose(idx,btn){
+  const item=Q[idx];
+  const v=Number(btn.dataset.v);
+  const correct = item.t==="ox" ? (v===1)===item.a : v===item.a;
+  answers[idx]={v,correct};
+  const rightV = item.t==="ox" ? (item.a?1:0) : item.a;
+  app.querySelectorAll("[data-v]").forEach(b=>{
+    b.disabled=true;
+    const bv=Number(b.dataset.v);
+    if(bv===rightV) b.classList.add("is-right");
+    else if(b===btn) b.classList.add("is-wrong");
+    else b.classList.add("is-dim");
+  });
+  const last = pos===order.length-1;
+  document.getElementById("after").innerHTML=`
+    <div class="exp ${correct?"":"bad"}">
+      <p class="verdict">${correct?"정답입니다.":"아쉽네요. 다시 짚어 볼까요?"}</p>
+      <p><span class="ans">정답 ${esc(ansText(item))}</span></p>
+      <p style="margin-top:6px">${esc(item.e)}</p>
+      <p class="src">근거: ${esc(item.s)}</p>
+    </div>
+    <button class="btn wide next" id="next">${last?"결과 보기":"다음 문제"}</button>`;
+  const nx=document.getElementById("next");
+  nx.onclick=()=>{ if(last) result(); else {pos++; render();} };
+  nx.focus({preventScroll:true});
+  document.getElementById("after").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+function result(){
+  chip.textContent="✓"; barLabel.textContent="결과";
+  const total=order.length, right=order.filter(i=>answers[i]&&answers[i].correct).length;
+  const wrong=order.filter(i=>!(answers[i]&&answers[i].correct));
+  const msg = right===total ? "모두 맞혔습니다. 다음 과제에서도 문단마다 한 줄 요약을 만들어 응집성을 점검해 보세요."
+    : right/total>=.75 ? "대부분 이해했습니다. 틀린 문항의 해설만 다시 읽고 넘어가세요."
+    : right/total>=.5 ? "개념은 잡혔지만 구분이 흔들립니다. 틀린 문제만 다시 풀어 보세요."
+    : "7C 문체 기준과 ‘요약 → 나열 → 통독’ 절차를 강의자료로 다시 확인해 보세요.";
+  const card=i=>{const it=Q[i],ok=answers[i]&&answers[i].correct;
+    return `<div class="rv ${ok?"":"bad"}"><span class="tag">${ok?"맞음":"틀림"} · ${it.t==="ox"?"OX":"다지선다"}</span>
+      <h3>${esc(it.q)}${it.quote?" "+esc(it.quote):""}</h3>
+      <p><b>정답 ${esc(ansText(it))}</b></p><p>${esc(it.e)}</p></div>`};
+  app.innerHTML=`
+  <section>
+    <span class="week">WEEK 12 · 결과</span>
+    <div class="score"><strong>${right}</strong><span>/ ${total}</span></div>
+    <div class="rule"></div>
+    <div class="bar-line">${msg}</div>
+    <div class="btns">
+      ${wrong.length?`<button class="btn" id="retry">틀린 ${wrong.length}문항 다시 풀기</button>`:""}
+      <button class="btn ghost" id="again">처음부터 다시</button>
+    </div>
+    ${wrong.length?`<p class="section-t">틀린 문제 해설</p><div class="review">${wrong.map(card).join("")}</div>`:""}
+    ${right?`<p class="section-t">맞힌 문제</p><div class="review">${order.filter(i=>!wrong.includes(i)).map(card).join("")}</div>`:""}
+  </section>`;
+  const r=document.getElementById("retry"); if(r) r.onclick=()=>begin(wrong);
+  document.getElementById("again").onclick=start;
+  goTop();
+}
+
+start();
+</script>
+</body>
+</html>
