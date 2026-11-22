@@ -5,6 +5,7 @@
 Weekly review quizzes for *AI시대 글쓰기의 힘* (The Power of Writing in the AI Era), an undergraduate general-education writing course at Hanyang University (Fall 2026).
 
 - 11주차 퀴즈: https://yoohy-hub.github.io/hyu-aiwriting-quiz/week11/
+- 12주차 퀴즈: https://yoohy-hub.github.io/hyu-aiwriting-quiz/week12/
 
 ## 관련 저장소 · Related
 
