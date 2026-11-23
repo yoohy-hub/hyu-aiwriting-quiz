@@ -6,6 +6,7 @@ Weekly review quizzes for *AI시대 글쓰기의 힘* (The Power of Writing in t
 
 - 11주차 퀴즈: https://yoohy-hub.github.io/hyu-aiwriting-quiz/week11/
 - 12주차 퀴즈: https://yoohy-hub.github.io/hyu-aiwriting-quiz/week12/
+- 13주차 퀴즈: https://yoohy-hub.github.io/hyu-aiwriting-quiz/week13/
 
 ## 관련 저장소 · Related
 
